@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow" xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd
+http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+<flow name="incident_post-incident">
+		<validation:is-not-blank-string doc:name="validate-shortDescription-is-not-blank-string" doc:id="027ccc6b-fcc3-4288-a469-0ea4a656b441" value="#[payload.shortDescription]" message="Short Description Empty"/>
+		<ee:transform doc:name="JSON to XML" doc:id="cb11e576-01ee-40bd-ae9a-d9f2507ac982">
+			<ee:message>
+				<ee:set-payload resource="transforms/dwl/snow-request-xml.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Before Connector Call" doc:id="1bd19c15-a761-470e-84b1-d41249f9eed1" message="${application-msgs.before-connector-call-message}"/>
+		<until-successful maxRetries="${retry.servicenow.numRetries}" doc:name="until-successful-invoke-servicenow" doc:id="9a36f693-3b4a-49d4-98a5-fd43140a0ae9" millisBetweenRetries="${retry.servicenow.delayMillisecs}">
+		<try doc:name="Try" doc:id="35e01098-78d5-4f40-a82b-4b35948e5e5f">
+			<servicenow:invoke doc:id="becc9ad4-4104-4d37-b7b3-78b89f4ebd4f" doc:name="invoke-servicenow-insertOperation" config-ref="ServiceNow_Config" service="incident" operation="insert" >
+
+			</servicenow:invoke>
+			<error-handler>
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="3d416b78-851d-44f0-ad42-00899d16008e" type="ANY" when='error.cause.message contains "Insert Aborted"'>
+						<set-variable value="400" doc:name="Set HTTP Status Var" doc:id="eea4d7c5-684c-45f7-bac4-564608f94558" variableName="httpStatus" />
+						<logger level="INFO" doc:name="Logger" doc:id="044fee60-9a07-4a4c-bd49-667f796ff6e9" message="#[error.cause]"/>
+						<flow-ref doc:name="common-error-handler_connector-exception" doc:id="695ff417-be1c-4b18-80f5-1eb0e30978bc" name="common-error-handler_connector-exception"/>
+				
+</on-error-continue>
+			</error-handler>
+		</try>
+		</until-successful>
+		<choice doc:name="Choice" doc:id="38a15b3b-ff83-4a06-a2c1-570fac899caf" >
+			<when expression="#[vars.httpStatus != null]">
+				<ee:transform doc:name="Error Response Map" doc:id="157e23fa-241c-4e8b-906f-b14ed17b167a" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.exceptionResponse]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Response Map" doc:id="c886d2d0-6091-45f7-8603-6b9deb8b99cd">
+			<ee:message>
+				<ee:set-payload resource="transforms/dwl/snow-response-json.dwl" />
+			</ee:message>
+		</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="After Transform" doc:id="304b826a-412e-4953-8fa1-43a7a78dd166" message="${application-msgs.after-connector-call-message}"/>
+		
+</flow>
+</mule>

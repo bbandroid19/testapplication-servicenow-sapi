@@ -1,0 +1,63 @@
+# API specification
+app-config:
+  org-id: b0beec90-c6cc-4c36-8f7c-ef1f8f91253b
+  app-name: testapplication-servicenow-sapi
+api:
+  name: "${api.name}"
+  version: "${project.version}"
+  #Replace with respective autodiscovery id
+  autodiscoveryID: "16422524"
+  
+# Listener configuration
+https:
+  host: "0.0.0.0"
+  port: "8082"
+  
+#API Configurations
+servicenow-sys-api:
+  http-listener:
+    path: "/api/*"
+
+# ServiceNow Instance Configurations
+servicenow:
+  # Replace with respective ServiceNow Instance URL
+  url: "https://dev102269.service-now.com"
+  instance: "ROME"
+  urgency: "5"
+  severity: "Low"
+  password: "7eVv+uIe@JL8"
+  userName: "admin"
+# SFDC-ServiceNow Priority-State Cross Reference Mapping
+servicenow-mapping:
+  priority:
+    Low: "4"
+    High: "2"
+    Medium: "3"
+  state:
+    Closed: "5"
+    Working: "2"
+    New: "1"
+    Escalated: "3"
+    
+# Retry configuration
+retry:
+   servicenow: 
+    delayMillisecs: "3000"
+    numRetries: "3"
+    
+# Reconnect configuration
+reconnection:
+     servicenow:
+      frequency: "2000"
+      attempts: "2"
+      
+# Customize the application messages in the below section
+application-msgs:
+  # Before Connector logger message
+  before-connector-call-message: "Before Connector Call"
+  # After Connector logger message
+  after-connector-call-message: "After Connector Call"
+  # ServiceNow Incident create success message
+  incident-create-success-message: "Incident Created Successfully"
+
+

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+
+	<groupId>org.mule.examples</groupId>
+	<artifactId>testapplication-servicenow-sapi</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+
+	<packaging>mule-application</packaging>
+	<name>testapplication-servicenow-sapi</name>
+	<description>Component of MuleSoft Accelerator for Salesforce Clouds</description>
+
+	<properties>
+		<api.name>Accelerator ServiceNow System API</api.name>
+		<api.version>v1</api.version>
+		<accelerator-common-core.version>1.5.1</accelerator-common-core.version>
+		<anypoint.platform.visualizerLayer>System</anypoint.platform.visualizerLayer>
+		<mule-wsc-connector.version>1.6.2</mule-wsc-connector.version>
+		<anypoint-mq-connector.version>3.1.5</anypoint-mq-connector.version>
+		<mule-b2c-data-connector.version>1.0.0</mule-b2c-data-connector.version>
+		<mule-b2c-shop-connector.version>2.0.0</mule-b2c-shop-connector.version>
+		<mule-coupa-connector.version>3.0.0</mule-coupa-connector.version>
+		<mule-db-connector.version>1.10.6</mule-db-connector.version>
+		<mule-docusign-connector.version>1.0.3</mule-docusign-connector.version>
+		<mule-email-connector.version>1.5.2</mule-email-connector.version>
+		<mule-file-connector.version>1.3.4</mule-file-connector.version>
+		<mule-hl7-extension.version>4.2.7</mule-hl7-extension.version>
+		<mule-hl7-mllp-connector.version>2.1.4</mule-hl7-mllp-connector.version>
+		<mule-http-connector.version>1.6.0</mule-http-connector.version>
+		<mule-jira-connector.version>1.1.7</mule-jira-connector.version>
+		<mule-objectstore-connector.version>1.2.1</mule-objectstore-connector.version>
+		<mule-salesforce-connector.version>10.13.2</mule-salesforce-connector.version>
+		<mule-salesforce-composite-connector.version>2.10.1</mule-salesforce-composite-connector.version>
+		<mule-sap-connector.version>5.4.1</mule-sap-connector.version>
+		<mule-saps4hana-connector.version>2.3.8</mule-saps4hana-connector.version>
+		<mule-sfdc-mc-connector.version>3.2.4</mule-sfdc-mc-connector.version>
+		<mule-servicenow-connector.version>6.11.0</mule-servicenow-connector.version>
+		<mule-sftp-connector.version>1.4.1</mule-sftp-connector.version>
+		<mule-sockets-connector.version>1.2.2</mule-sockets-connector.version>
+		<mule-twilio-connector.version>4.2.4</mule-twilio-connector.version>
+		<mule-vm-connector.version>2.0.0</mule-vm-connector.version>
+		<mule-websockets-connector.version>1.0.0</mule-websockets-connector.version>
+		<mule-wsc-connector.version>1.6.7</mule-wsc-connector.version>
+		<mule-x12-edi-connector.version>2.7.3</mule-x12-edi-connector.version>
+		<!-- Modules -->
+		<mule-aggregators-module.version>1.0.5</mule-aggregators-module.version>
+		<mule-java-module.version>1.2.9</mule-java-module.version>
+		<mule-apikit-module.version>1.5.8</mule-apikit-module.version>
+		<mule-module-apikit-odata.version>2.1.3</mule-module-apikit-odata.version>
+		<mule-module-file-extension-common.version>1.3.5</mule-module-file-extension-common.version>
+		<mule-oauth-module.version>1.1.17</mule-oauth-module.version>
+		<mule-secure-configuration-property-module.version>1.2.3</mule-secure-configuration-property-module.version>
+		<mule-validation-module.version>1.4.5</mule-validation-module.version>
+		<!-- Plugin properties -->
+		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-enforcer-plugin.version>3.0.0</maven-enforcer-plugin.version>
+		<maven-resources-plugin.version>3.2.0</maven-resources-plugin.version>
+		<mule.maven.plugin.version>3.5.2</mule.maven.plugin.version>
+		<knit-maven-plugin.version>2.0.4</knit-maven-plugin.version>
+		<!-- Runtime -->
+		<app.runtime.version>4.4.0</app.runtime.version>
+		<!-- Testing -->
+		<munit.version>2.3.6</munit.version>
+		<munit-tools.version>2.3.7</munit-tools.version>
+		<munit-runner.version>2.3.7</munit-runner.version>
+		<mule-weave-assertions.version>1.0.6</mule-weave-assertions.version>
+		<!-- Build configuration properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>mule-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<version>${mule.maven.plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>com.mulesoft.munit.tools</groupId>
+				<artifactId>munit-maven-plugin</artifactId>
+				<version>${munit.version}</version>
+				<executions>
+						<execution>
+							<id>test</id>
+							<phase>test</phase>
+							<goals>
+								<goal>test</goal>
+								<goal>coverage-report</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<!-- These are supplied for secured property usage -->
+						<environmentVariables>
+							<mule.env>local</mule.env>
+							<encryptionKey>Salesforce123456</encryptionKey>
+						</environmentVariables>
+						<coverage>
+						<ignoreFiles>
+							<ignoreFile>common-error-handler.xml</ignoreFile>
+							<ignoreFile>global-common.xml</ignoreFile>
+						</ignoreFiles>
+							<runCoverage>true</runCoverage>
+							<formats>
+								<format>html</format>
+							</formats>
+						</coverage>
+					</configuration>
+				
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.mule.examples</groupId>
+			<artifactId>accelerator-common-core</artifactId>
+			<version>${accelerator-common-core.version}</version>
+			
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.connectors</groupId>
+			<artifactId>anypoint-mq-connector</artifactId>
+			<version>${anypoint-mq-connector.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-file-connector</artifactId>
+			<version>${mule-file-connector.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-module-file-extension-common</artifactId>
+			<version>${mule-module-file-extension-common.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.examples</groupId>
+			<artifactId>accelerator-common-core</artifactId>
+			<version>${accelerator-common-core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-http-connector</artifactId>
+			<version>${mule-http-connector.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-apikit-module</artifactId>
+			<version>${mule-apikit-module.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.connectors</groupId>
+			<artifactId>mule-sockets-connector</artifactId>
+			<version>${mule-sockets-connector.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.modules</groupId>
+			<artifactId>mule-secure-configuration-property-module</artifactId>
+			<version>${mule-secure-configuration-property-module.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-runner</artifactId>
+			<version>${munit-runner.version}</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-tools</artifactId>
+			<version>${munit-tools.version}</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.modules</groupId>
+			<artifactId>mule-validation-module</artifactId>
+			<version>${mule-validation-module.version}</version>
+			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.weave</groupId>
+			<artifactId>assertions</artifactId>
+			<version>${mule-weave-assertions.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+            <groupId>b0beec90-c6cc-4c36-8f7c-ef1f8f91253b</groupId>
+            <artifactId>testapplication-servicenow-sapi</artifactId>
+            <version>1.0.0</version>
+            <classifier>raml</classifier>
+            <type>zip</type>
+        </dependency>
+		<dependency>
+
+			<groupId>com.mulesoft.connectors</groupId>
+
+			<artifactId>mule-servicenow-connector</artifactId>
+
+			<version>6.11.1</version>
+
+			<classifier>mule-plugin</classifier>
+
+		</dependency>
+	</dependencies>
+	<repositories>
+		<repository>
+			<id>anypoint-exchange</id>
+			<name>Anypoint Exchange</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v1/maven</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>mulesoft-releases</id>
+			<name>MuleSoft Releases Repository</name>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>https://repo1.maven.org/maven2/</url>
+			<layout>default</layout>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>anypoint-exchange-v3</id>
+			<name>Anypoint Exchange V3</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v3/maven</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>mulesoft-releases</id>
+			<name>mulesoft release repository</name>
+			<layout>default</layout>
+			<url>https://repository.mulesoft.org/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<id>anypoint-exchange-v2</id>
+			<name>Anypoint Exchange</name>
+			<url>https://maven.anypoint.mulesoft.com/api/v2/maven</url>
+			<layout>default</layout>
+		</pluginRepository>
+	</pluginRepositories>
+
+</project>

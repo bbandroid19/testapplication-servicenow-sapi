@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:anypoint-mq="http://www.mulesoft.org/schema/mule/anypoint-mq"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:json-logger="http://www.mulesoft.org/schema/mule/json-logger"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:servicenow="http://www.mulesoft.org/schema/mule/servicenow"
+	xmlns:wsc="http://www.mulesoft.org/schema/mule/wsc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd http://www.mulesoft.org/schema/mule/wsc http://www.mulesoft.org/schema/mule/wsc/current/mule-wsc.xsd http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd http://www.mulesoft.org/schema/mule/json-logger http://www.mulesoft.org/schema/mule/json-logger/current/mule-json-logger.xsd http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd http://www.mulesoft.org/schema/mule/anypoint-mq http://www.mulesoft.org/schema/mule/anypoint-mq/current/mule-anypoint-mq.xsd http://www.mulesoft.org/schema/mule/servicenow http://www.mulesoft.org/schema/mule/servicenow/current/mule-servicenow.xsd">
+
+	<global-property doc:name="Global Property-mule.env"
+		doc:id="2ed4cc8c-334a-491d-a9b3-28e0e1167fae" name="mule.env"
+		value="dev" />
+	<global-property doc:name="Global Property-mule.key"
+		doc:id="58af6116-a283-4b48-b966-6326dd99b19b" name="mule.key"
+		value="${mule.key}" />
+
+	<http:listener-config
+		name="snow-sys-api-httpListenerConfig">
+		<http:listener-connection
+			host="${https.host}"
+			port="${https.port}" protocol="HTTPS" tlsContext="common-selfsigned_tlsContext"/>
+	</http:listener-config>
+	<configuration-properties doc:name="mule-env"
+		doc:id="939c271a-0e1d-4c50-a574-2fe4d75481bd"
+		file="config/config-${mule.env}.yaml" />
+	<configuration doc:name="global-error-handler"
+		doc:id="29fc8aa5-15e9-45b0-9034-8efd1244c78f"
+		defaultErrorHandler-ref="error-handler_common" />
+	<!-- <api-gateway:autodiscovery apiId="${api.autodiscoveryID}" doc:name="API 
+		Autodiscovery" doc:id="0e4ac08d-a5c4-40ce-9962-494c5ae86829" flowRef="servicenow-sys-api_main" 
+		/> -->
+	<servicenow:config name="ServiceNow_Config"
+		doc:name="ServiceNow Config"
+		doc:id="2fe507c9-c94e-487a-acb2-aac01e746539">
+		<servicenow:basic-connection
+			username="${servicenow.userName}" password="${secure::servicenow.password}"
+			serviceAddress="${servicenow.url}"
+			serviceNowVersion="#[p('servicenow.instance')]">
+			<reconnection>
+				<reconnect frequency="${reconnection.servicenow.frequency}"
+					count="${reconnection.servicenow.attempts}" />
+			</reconnection>
+			<servicenow:transport>
+				<servicenow:basic-auth-http-message-dispatcher-provider
+					username="${servicenow.userName}" password="${secure::servicenow.password}" readTimeout="60000"/>
+			</servicenow:transport>
+		</servicenow:basic-connection>
+	</servicenow:config>
+	<import doc:name="global-exception"
+		doc:id="d6bcc24d-bad0-41fc-bc83-a027666f32a4" file="global-common.xml" />
+	<import doc:name="common-configuration"
+		doc:id="926c0102-07fe-43f5-abce-ab0c15586a9b"
+		file="common-error-handler.xml" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="d6f77e71-a00c-433b-85ee-2d84e8bc4301" file="config\config-secured-${mule.env}.yaml" key="${mule.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+
+</mule>

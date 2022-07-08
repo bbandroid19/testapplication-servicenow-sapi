@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="accelerator-servicenow-sys-api-suite.xml" />
+	<munit:test name="post:\incident:application\json:accelerator-servicenow-sys-api-config-test" doc:id="fa070181-b3cb-43c8-866e-605bef5f0a55" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock incident_post-incident" doc:id="23d44bdb-f0bb-407d-b249-4d2d56db5948" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="5a02dae4-ab66-41ee-8154-3a4bca7880a4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://postincidentapplicationjsonacceleratorservicenowsysapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://postincidentapplicationjsonacceleratorservicenowsysapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://postincidentapplicationjsonacceleratorservicenowsysapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="762c9569-fc5b-49e2-bb74-0411e4f31bee" >
+				<munit:payload value="#[output application/json --- readUrl('classpath://postincidentapplicationjsonacceleratorservicenowsysapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" mediaType="application/json" />
+				<munit:attributes value="#[readUrl('classpath://postincidentapplicationjsonacceleratorservicenowsysapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://postincidentapplicationjsonacceleratorservicenowsysapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to post:\incident:application\json:accelerator-servicenow-sys-api-config" doc:id="595b4a57-123b-49d3-ae51-d4beaa7d581e" name="post:\incident:application\json:accelerator-servicenow-sys-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="fe14fb00-cde0-487c-a760-0ff2da34ffb4" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import postincidentapplicationjsonacceleratorservicenowsysapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\ping:accelerator-servicenow-sys-api-config-test" doc:id="ce46b3c5-85ba-499e-b194-7eebd09445dd" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock ping_get-health" doc:id="7ece1ff1-59db-4fbe-8c4e-be5238abbbdd" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="1450997c-bbbb-444a-8b30-187e38150f91" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getpingacceleratorservicenowsysapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:attributes value="#[readUrl('classpath://getpingacceleratorservicenowsysapiconfigtest\mock_attributes.dwl')]" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getpingacceleratorservicenowsysapiconfigtest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="httpStatus" value="#[readUrl('classpath://getpingacceleratorservicenowsysapiconfigtest\mock_variable_1.dwl')]" encoding="UTF-8" />
+						<munit-tools:variable key="checkDependencies" value="#[output application/java --- readUrl('classpath://getpingacceleratorservicenowsysapiconfigtest\mock_variable_2.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="7109de0e-b351-43f5-b3f4-2490b9543278" >
+				<munit:payload value="#[readUrl('classpath://getpingacceleratorservicenowsysapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getpingacceleratorservicenowsysapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getpingacceleratorservicenowsysapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\ping:accelerator-servicenow-sys-api-config" doc:id="ff09661b-6b44-4b9e-9715-be440de2907a" name="get:\ping:accelerator-servicenow-sys-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="4fec20b2-00ac-4493-acf4-7fec1da2faa1" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getpingacceleratorservicenowsysapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

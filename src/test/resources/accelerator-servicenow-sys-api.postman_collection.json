@@ -1,0 +1,388 @@
+{
+	"info": {
+		"_postman_id": "4e6d0e9d-634e-4caa-b99f-d3aefa08fee4",
+		"name": "accelerator-servicenow-sys-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Release 1.3",
+			"item": [
+				{
+					"name": "Incident-Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "client_id",
+								"value": "64d6d246419f4eebac03e1f5130efa62",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "client_secret",
+								"value": "82B1292cE0614306B826E29598723CD7",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"active\": \"true\",\r\n  \"activityDue\": \"10/2/2019\",\r\n  \"comments\": \"This is an example incident\",\r\n  \"commentsAndWorkNotes\": \"This is an Example Incident\",\r\n  \"description\": \"This issue is caused due to power outage\",\r\n  \"sfdcCaseId\": \"5003k00000zSbwPAAAS\",\r\n  \"incidentState\": \"1\",\r\n  \"priority\": \"1\",\r\n  \"shortDescription\": \"Power Outage Issue\",\r\n  \"state\": \"2\"\r\n}"
+						},
+						"url": {
+							"raw": "https://{{host_servicenow_sys_api}}/api/incident",
+							"protocol": "https",
+							"host": [
+								"{{host_servicenow_sys_api}}"
+							],
+							"path": [
+								"api",
+								"incident"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incident-Failure",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Failure POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "client_id",
+								"type": "text",
+								"value": "64d6d246419f4eebac03e1f5130efa62",
+								"disabled": true
+							},
+							{
+								"key": "client_secret",
+								"type": "text",
+								"value": "82B1292cE0614306B826E29598723CD7",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{host_servicenow_sys_api}}/api/incident",
+							"protocol": "https",
+							"host": [
+								"{{host_servicenow_sys_api}}"
+							],
+							"path": [
+								"api",
+								"incident"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incident-400-Bad-Request",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Failure POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([400]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "client_id",
+								"type": "text",
+								"value": "64d6d246419f4eebac03e1f5130efa62",
+								"disabled": true
+							},
+							{
+								"key": "client_secret",
+								"type": "text",
+								"value": "82B1292cE0614306B826E29598723CD7",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"active\": \"232\",\n  \"activityDue\": \"10/2/2019\",\n  \"comments\": \"This is an example incident\",\n  \"commentsAndWorkNotes\": \"This is an Example Incident\",\n  \"description\": \"This issue is caused due to power outage\",\n  \"sfdcCaseId\": \"5003k00000zSbwPAAS\",\n  \"incidentState\": \"1\",\n  \"priority\": \"1\",\n  \"shortDescription\": \"Power Outage Issue\",\n  \"state\": \"2\"\n}"
+						},
+						"url": {
+							"raw": "https://{{host_servicenow_sys_api}}/api/incident",
+							"protocol": "https",
+							"host": [
+								"{{host_servicenow_sys_api}}"
+							],
+							"path": [
+								"api",
+								"incident"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incident-Retry-Exhausted",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Failure POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([500]);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "client_id",
+								"type": "text",
+								"value": "64d6d246419f4eebac03e1f5130efa62",
+								"disabled": true
+							},
+							{
+								"key": "client_secret",
+								"type": "text",
+								"value": "82B1292cE0614306B826E29598723CD7",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"active\": \"232\",\n  \"activityDue\": \"10/2/2019\",\n  \"comments\": \"This is an example incident\",\n  \"commentsAndWorkNotes\": \"This is an Example Incident\",\n  \"description\": \"This issue is caused due to power outage\",\n  \"sfdcCaseId\": \"5003k00000zSbwPAAS\",\n  \"incidentState\": \"1\",\n  \"priority\": \"1\",\n  \"shortDescription\": \"Power Outage Issue\",\n  \"state\": \"2\"\n}"
+						},
+						"url": {
+							"raw": "https://{{host_servicenow_sys_api}}/api/incident",
+							"protocol": "https",
+							"host": [
+								"{{host_servicenow_sys_api}}"
+							],
+							"path": [
+								"api",
+								"incident"
+							]
+						},
+						"description": "Execute when ServiceNow connectivity is down"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Release 1.4",
+			"item": [
+				{
+					"name": "Query Health",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{host_servicenow_sys_api}}/api/ping",
+							"protocol": "https",
+							"host": [
+								"{{host_servicenow_sys_api}}"
+							],
+							"path": [
+								"api",
+								"ping"
+							]
+						},
+						"description": "Call ping operation with no parameters"
+					},
+					"response": []
+				},
+				{
+					"name": "Query Health with Dependencies",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{host_servicenow_sys_api}}/api/ping?checkDependencies=true",
+							"protocol": "https",
+							"host": [
+								"{{host_servicenow_sys_api}}"
+							],
+							"path": [
+								"api",
+								"ping"
+							],
+							"query": [
+								{
+									"key": "checkDependencies",
+									"value": "true",
+									"description": "Include health of dependencies"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Query Health with Invalid Parameter",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{host_servicenow_sys_api}}/api/ping?checkDependencies=true-ish",
+							"protocol": "https",
+							"host": [
+								"{{host_servicenow_sys_api}}"
+							],
+							"path": [
+								"api",
+								"ping"
+							],
+							"query": [
+								{
+									"key": "checkDependencies",
+									"value": "true-ish",
+									"description": "Should not return dependencies"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{accelerator_app_client_secret}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{accelerator_app_client_id}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host_servicenow_sys_api",
+			"value": "accel-servicenow-sys-api-v1-dev.ca-c1.cloudhub.io"
+		}
+	]
+}

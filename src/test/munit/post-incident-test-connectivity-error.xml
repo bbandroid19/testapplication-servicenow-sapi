@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="post-incident-test-untilsuccessful.xml" />
+	<munit:test name="post-incident-test-connectivity-error-incident_post-incidentTest" doc:id="49229572-71d1-4987-9394-eee11b579187" description="Test" expectedErrorType="MULE:RETRY_EXHAUSTED" ignore="true">
+		<munit:behavior>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="87331df2-7617-4a94-8272-8a7ea9524474" processor="servicenow:invoke">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="invoke-servicenow-insertOperation" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="ServiceNow_Config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="MULE:RETRY_EXHAUSTED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="3b82a04a-1f0f-4b5d-ae5f-ac51466eb2c1" >
+				<munit:payload value="#[readUrl('classpath://transforms/examples/incident-mock-payload.dwl')]" />
+			</munit:set-event>
+			<flow-ref doc:name="post:\incident:application\json:snow-sys-api-config" doc:id="72202965-dbaf-45e5-9b80-19b18dd5d294" name="post:\incident:application\json:accelerator-servicenow-sys-api-config"/>
+		</munit:execution>
+	</munit:test>
+
+</mule>

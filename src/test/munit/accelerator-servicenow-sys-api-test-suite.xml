@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="accelerator-servicenow-sys-api-test-suite.xml" />
+	<munit:test name="accelerator-servicenow-sys-api-test-suite-accelerator-servicenow-sys-api-mainTest" doc:id="53acd9b5-f86d-49e5-b177-c9158c92da18" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="0fecc503-2733-4f92-8a08-b0f6d840d399" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to accelerator-servicenow-sys-api-main" doc:id="57cf6091-e79e-4a9d-88d9-36a65f545fac" name="accelerator-servicenow-sys-api-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="fba05eaf-0134-46e6-9846-20b0236f050a" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="accelerator-servicenow-sys-api-test-NOTFOUND" doc:id="96016774-c29a-4bb4-b2e2-323587704903" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="ee9f3194-f31b-448f-9000-3d141b5ddaea" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="4886b6f0-eec4-4366-b142-cbb1c64a3177" >
+				<flow-ref doc:name="Flow Reference" doc:id="29a5518c-c9b3-4eed-a532-7c9aab0cfee0" name="accelerator-servicenow-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="673b2df2-d99e-4efd-8266-ac14aa302b2f" >
+						<logger level="INFO" doc:name="Logger" doc:id="5f553f48-dd8c-4d32-8739-ed44f3a9a395" message="#[payload]"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="8f160af6-9edc-4c22-a0af-4b35c5626cc5" actual="#[payload]" expected='#[{message: "Resource not found"}]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="accelerator-servicenow-BADREQUEST" doc:id="390c238b-f704-45a5-bb02-dda8f85523bb" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="744756d4-df82-4a7b-890a-bb04163be430" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="9f211811-61b9-4f12-be39-6d9be657172d" >
+				<flow-ref doc:name="Flow Reference" doc:id="38282511-aa63-438d-95d2-0d8d16d00e00" name="accelerator-servicenow-sys-api-main"/>
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="8fddff2b-cb2a-4499-b35d-8347556e8525" >
+						<logger level="INFO" doc:name="Logger" doc:id="11c337e8-8676-410a-b8bb-93cd6b2ee09a" message="#[payload]"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="514d01cb-0fd1-4233-8316-128cfeae5b96" actual="#[payload]" expected='#[{message: "Bad request"}]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="accelerator-servicenow-sys-api-METHOD_NOT_ALLOWED" doc:id="8d422554-1ecb-49ce-b843-218ae5806528" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="2eb55e1b-d613-4619-b3a3-84e30b02cd68" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:METHOD_NOT_ALLOWED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="750923e5-552f-4680-a321-251e59a2888f" >
+				<flow-ref doc:name="Flow Reference" doc:id="3a06140d-9d5b-410b-95ad-402d74faa457" name="accelerator-servicenow-sys-api-main"/>
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="0b578c7b-a820-46a9-9682-ee5c54303dc3" >
+						<logger level="INFO" doc:name="Logger" doc:id="3a09296e-d2fe-47ad-8803-0b7737ef1ca2" message="#[payload]"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="c0b0379d-014f-4f45-a76f-fb2a066a0ef0" expected='#[{message: "Method not allowed"}]' actual="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="accelerator-servicenow-sys-api-test-UNSUPPORTED_MEDIA_TYPE" doc:id="f80ba2f5-e9b3-4aca-a732-50f27efe203b" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="1f41d94c-f902-4b5c-a561-82aaebee67c4" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:UNSUPPORTED_MEDIA_TYPE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="d7e38f8d-7de5-44c4-aa60-2e5f542963fe" >
+				<flow-ref doc:name="Flow Reference" doc:id="a2030255-1251-41d9-a156-441ad3d7c096" name="accelerator-servicenow-sys-api-main"/>
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="7b717a03-2e6d-4be1-b00e-4c7b7839ce32" >
+						<logger level="INFO" doc:name="Logger" doc:id="482001a6-2bc4-4ce1-96e7-e21c4b99b1f3" message="#[payload]"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="845a815c-d31b-4e40-bf12-e2f4afdf5c88" actual="#[payload]" expected='#[{message: "Unsupported media type"}]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="accelerator-servicenow-sys-api-test-NOT_IMPLEMENTED" doc:id="222c306e-8fb3-4bca-a94b-574902060259" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="4ea54b38-2eed-4acc-aea2-d9c6a86260bb" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_IMPLEMENTED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="d0a378ee-56ce-494d-9580-c3f4c3fced8d" >
+				<flow-ref doc:name="Flow Reference" doc:id="7d83ee5c-48f2-4d3a-b858-253226bd3ec8" name="accelerator-servicenow-sys-api-main"/>
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="f858bafa-c645-409b-a284-62f44bff3010" >
+						<logger level="INFO" doc:name="Logger" doc:id="ec9885ca-a93c-4ac9-a8f9-6cfd32bec50d" message="#[payload]"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="33516bb8-9694-478c-9f95-15df1b902359" actual="#[payload]" expected='#[{message: "Not Implemented"}]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="accelerator-servicenow-sys-api-test-suite-accelerator-servicenow-sys-api-consoleTest" doc:id="c0386b98-a0ab-45f1-a037-3ed9f5476492" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="dc33ca43-9cfe-42f2-b283-f3ba892a565a" processor="apikit:console">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to accelerator-servicenow-sys-api-console" doc:id="28e60678-4a16-4aa0-b070-d3ea7ccfaf69" name="accelerator-servicenow-sys-api-console"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a3354524-06eb-4c48-aeac-1248d1ba569a" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="accelerator-servicenow-sys-api-APIKIT:NOT_IMPLEMENTED" doc:id="3fe25d02-67e1-4218-ac0b-c51ab02d7113" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="3eb52ac3-e3f1-4a0b-8cbc-5b5cc13fbbaf" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_IMPLEMENTED" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="5635cb86-3277-48fa-85e6-005cf3d1697c" >
+				<flow-ref doc:name="Flow Reference" doc:id="4b97e541-7452-427a-a156-cc2166181d46" name="accelerator-servicenow-sys-api-main" />
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="6a5543ac-7b73-4625-ad7a-94393fac063b" >
+						<logger level="INFO" doc:name="Logger" doc:id="85f9098d-c7d1-4369-969b-79ada3480980" message="#[payload]"/>
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="35e1e399-a58d-43b3-a72f-46f902d44ffd" actual="#[payload]" expected='#[{message: "Not Implemented"}]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="accelerator-servicenow-sys-api-test-suiteTest-console-notfound" doc:id="c2a0b384-0ef0-437e-9702-5c99e512a59e" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="9377a9f5-a191-4a3b-9eec-fe86268c1c07" processor="apikit:console">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="accelerator-servicenow-sys-api-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<try doc:name="Try" doc:id="f2d1b8f6-0da8-4c0c-aa1c-c55cb3fc94b7" >
+				<flow-ref doc:name="Flow Reference" doc:id="c10287a4-2dcb-4c0e-8efb-bf50df419966" name="accelerator-servicenow-sys-api-console"/>
+				<error-handler >
+					<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="5f725201-fab5-4091-b689-2fb1998c9e7e" >
+						<logger level="INFO" doc:name="Logger" doc:id="9de9e0ff-7bd2-4898-8b50-82b80c67ce3f" />
+					</on-error-continue>
+				</error-handler>
+			</try>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="9e7699dd-8e58-4ec6-acfc-23f86e63cd58" actual="#[payload]" expected='#[{message: "Resource not found"}]'/>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>
